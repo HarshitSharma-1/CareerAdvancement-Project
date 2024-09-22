@@ -1,0 +1,29 @@
+/* Background image for the entire container */
+.login-container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url("../assets/markus-spiske-p-l8OjDH9eE-unsplash.jpg");
+  background-size: cover;
+  background-position: center;
+}
+
+/* Style for centering the form with a white background */
+.form-container {
+  background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 400px;
+}
+
+/* Align buttons in the form header */
+.form-header-buttons {
+  margin-bottom: 20px;
+}
+
+/* Align buttons in the form footer */
+.form-footer-buttons {
+  margin-top: 20px;
+}
