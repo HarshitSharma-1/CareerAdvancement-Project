@@ -13,8 +13,8 @@ app.get("/", (req, res) => {
 });
 
 app.use("/", require("./routes/loginRoutes"));
-// app.use("/admin", require("./routes/adminRoutes"));
-// app.use("/faculty/:id", require("./routes/facultyRoutes"));
+app.use("/admin", require("./routes/adminRoutes"));
+app.use("/faculty/", require("./routes/facultyRoutes"));
 
 app.listen(port, () => {
   console.log(`Server is started on http://localhost:${port}`);

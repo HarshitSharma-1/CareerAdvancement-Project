@@ -4,16 +4,12 @@ const router = express.Router();
 const {
   register,
   login,
-  deleteFaculty,
+  getProfile,
 } = require("../controllers/loginController");
+const authenticateToken = require("../middlewares/authMiddleware");
 
-// Register a new faculty
 router.post("/register", register);
-
-// Request for login the faculty or admin
 router.post("/login", login);
-
-// Deleter the faculty
-router.delete("/faculty/:id", deleteFaculty);
+router.get("/profile", authenticateToken, getProfile);
 
 module.exports = router;

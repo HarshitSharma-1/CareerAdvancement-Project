@@ -2,8 +2,6 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const connection = require("../config/db");
 const asyncHandler = require("express-async-handler");
-const { authenticateToken } = require("../middlewares/authMiddleware");
-const checkRole = require("../middlewares/roleMiddleware");
 
 // @desc Authennticate the user
 // @route POST api/register/
@@ -61,13 +59,15 @@ const login = asyncHandler(async (req, res) => {
 
       const user = {
         id: results[0].id,
+        user_id: results[0].user_id,
         email: results[0].email,
         firstname: results[0].firstname,
         lastname: results[0].lastname,
+        role: results[0].role,
       };
       console.log(user);
       const accessToken = jwt.sign(user, process.env.JWT_SECRET, {
-        expiresIn: "1h",
+        expiresIn: "3h",
       });
 
       res.json({ user, accessToken });
@@ -75,20 +75,35 @@ const login = asyncHandler(async (req, res) => {
   );
 });
 
+// @desc Login the user
+// @route POST api/login
+// @public Public
+const getProfile = asyncHandler(async (req, res) => {
+  connection.query(
+    "SELECT firstname,lastname,email,contact,facultyDepartment FROM users WHERE user_id = ?",
+    [req.user.user_id],
+    async (err, results) => {
+      if (err) return res.status(500).send(err);
+      res.status(200).send(results);
+    }
+  );
+});
+
 // @desc
 // @route
 // @public
-const deleteFaculty = asyncHandler(async (req, res) => {
-  "/faculty/:id",
-    authenticateToken,
-    checkRole(["Admin"]),
-    (req, res) => {
-      const { id } = req.params;
-      connection.query("DELETE FROM users WHERE id = ?", [id], (err) => {
-        if (err) return res.status(500).send(err);
-        res.send("User deleted");
-      });
-    };
-});
+// const deleteFaculty = asyncHandler(async (req, res) => {
+//  const userId = req.user.user_id;
+//   const query = 'DELETE FROM users WHERE user_id = ?';
 
-module.exports = { register, login, deleteFaculty };
+//   connection.query(query, [userId], (err, results) => {
+//     if (err) return res.status(500).json({ error: 'Database error' });
+
+//     if (results.affectedRows === 0) {
+//       return res.status(404).json({ message: 'User not found' });
+//     }
+//     res.json({ message: 'Profile deleted successfully' });
+
+// });
+
+module.exports = { register, login, getProfile };
